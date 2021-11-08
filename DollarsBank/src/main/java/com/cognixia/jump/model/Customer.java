@@ -9,10 +9,12 @@ package com.cognixia.jump.model;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity
 public class Customer {
 
 	final static private String passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$";
@@ -22,7 +24,7 @@ public class Customer {
 	@Id // Pk
 		// @Column(name="USER_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int customerId;
+	private int id;
 
 	@Column(name = "NAME")
 	private String name;
@@ -121,12 +123,13 @@ public class Customer {
 		this.currentBalance = 0.0;
 	}
 
-	public int getCustomerId() {
-		return customerId;
+
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -147,7 +150,7 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [customerId=" + customerId + ", name=" + name + ", address=" + address + ", phoneNumber="
+		return "Customer [customerId=" + id + ", name=" + name + ", address=" + address + ", phoneNumber="
 				+ phoneNumber + ", username=" + username + ", password=" + password + ", initialDeposit="
 				+ initialDeposit + ", currentBalance=" + currentBalance + "]";
 	}
