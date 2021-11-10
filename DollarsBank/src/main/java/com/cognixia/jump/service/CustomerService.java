@@ -44,6 +44,11 @@ public class CustomerService {
 //		return deleted;
 //	}
 //	
+	public Customer updateCustomer(int id, Customer customer) throws ResourceNotFoundException {
+		findCustomerById(id);
+		Customer updated = repository.save(customer);
+		return updated;	
+	}
 
 	
 //	public Customer updateCustomer(int id, Customer Customer) throws ResourceNotFoundException {

@@ -27,20 +27,33 @@ public class CustomerController {
 	CustomerService service;
 
 	@CrossOrigin(origins= "http://localhost:3000")
-	@GetMapping("/Customer")
+	@GetMapping("/customer")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 		return new ResponseEntity<>(service.findAllCustomers(),HttpStatus.OK);
 	}
+	
+	
 	@CrossOrigin(origins= "http://localhost:3000")
-	@GetMapping("/Customer/{id}")
+	@GetMapping("/customer/{id}")
 	public ResponseEntity<Customer> getCustomerById(@PathVariable int id) throws ResourceNotFoundException {
 		return new ResponseEntity<>(service.findCustomerById(id),HttpStatus.OK);
 	}
 	
+	
+	
+	
+	
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PutMapping("/Customer/{id}")
+	public ResponseEntity<Customer> updateCustomerById(@PathVariable int id, @RequestBody Customer Customer) throws ResourceNotFoundException{
+		return new ResponseEntity<>(service.updateCustomer(id, Customer), HttpStatus.OK);
+	}
+	
+	
 
 	
 	@CrossOrigin(origins= "http://localhost:3000")
-	@PostMapping("/Customer")
+	@PostMapping("/customer")
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer Customer){
 		return new ResponseEntity<>(service.createCustomer(Customer), HttpStatus.CREATED);
 

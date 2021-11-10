@@ -105,6 +105,17 @@ public class Customer {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	
+	
+	
+	public String toJson() {
+		
+		return "{\"id\" : " + id
+				+ ", \"username\" : \"" + username + "\""
+				+ ", \"password\" : \"" + password + "\"" +
+		"}";
+	}
 
 	public Customer() {
 		super();
