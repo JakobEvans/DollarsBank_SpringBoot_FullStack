@@ -8,6 +8,7 @@ package com.cognixia.jump.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +26,11 @@ public class Customer implements Serializable{
 
 	final static private String phoneNumberRegex = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
 
+	
+    private boolean loggedIn;
+
+	
 	@Id // Pk
-		// @Column(name="USER_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
@@ -67,6 +71,8 @@ public class Customer implements Serializable{
 		this.initialDeposit = initialDeposit;
 
 		this.currentBalance = currentBalance;
+		
+		this.loggedIn = false;
 
 	}
 
@@ -110,8 +116,30 @@ public class Customer implements Serializable{
 		this.address = address;
 	}
 	
-	
-	
+	 public boolean isLoggedIn() {
+	        return loggedIn;
+	    }
+	    public void setLoggedIn(boolean loggedIn) {
+	        this.loggedIn = loggedIn;
+	    }
+
+	   @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!(o instanceof Customer)) return false;
+	        
+	        Customer customer = (Customer) o;
+	        
+	        return Objects.equals(username, customer.username) &&
+	                Objects.equals(password, customer.password);
+	    }
+	   
+	   
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(id, username, password, 
+	                            loggedIn);
+	    }
 	
 	public String toJson() {
 		
@@ -136,6 +164,8 @@ public class Customer implements Serializable{
 		this.initialDeposit = 0.0;
 
 		this.currentBalance = 0.0;
+		
+		this.loggedIn = false;
 	}
 
 

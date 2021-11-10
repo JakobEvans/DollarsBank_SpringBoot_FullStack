@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
 import com.cognixia.jump.model.Customer;
+import com.cognixia.jump.model.Status;
 import com.cognixia.jump.service.CustomerService;
 
 @RestController
@@ -26,59 +27,79 @@ public class CustomerController {
 	@Autowired
 	CustomerService service;
 
-	@CrossOrigin(origins= "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
-		return new ResponseEntity<>(service.findAllCustomers(),HttpStatus.OK);
+		return new ResponseEntity<>(service.findAllCustomers(), HttpStatus.OK);
 	}
-	
-	
-	@CrossOrigin(origins= "http://localhost:3000")
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer/{id}")
 	public ResponseEntity<Customer> getCustomerById(@PathVariable int id) throws ResourceNotFoundException {
-		return new ResponseEntity<>(service.findCustomerById(id),HttpStatus.OK);
+		return new ResponseEntity<>(service.findCustomerById(id), HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
-	@CrossOrigin(origins= "http://localhost:3000")
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/customer/{id}")
-	public ResponseEntity<Customer> updateCustomerById(@PathVariable int id, @RequestBody Customer Customer) throws ResourceNotFoundException{
-		return new ResponseEntity<>(service.updateCustomer(id, Customer), HttpStatus.OK);
+	public ResponseEntity<Customer> updateCustomerById(@PathVariable int id, @RequestBody Customer customer)
+			throws ResourceNotFoundException {
+		return new ResponseEntity<>(service.updateCustomer(id, customer), HttpStatus.OK);
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping("/customer/login")
+	public Status loginCustomer(@RequestBody Customer customer)throws ResourceNotFoundException {
+//		return new ResponseEntity<>(service.login(customer), HttpStatus.OK);
+		return service.login(customer);
+
+	
 	}
 	
 	
 	
-	
+	@CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/customer/logout")
+    public Status logUserOut(@RequestBody Customer customer) {
+//		return new ResponseEntity<>(service.logout(customer), HttpStatus.OK);
+		return service.logout(customer);
 
-	@CrossOrigin(origins= "http://localhost:3000")
+    }
+	
+	
+	
+//
+//	@CrossOrigin(origins = "http://localhost:3000")
+//	@PostMapping("/customer")
+//	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+////		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.CREATED);
+//		return service.createCustomer(customer);
+//
+//
+//	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/customer")
-	public ResponseEntity<Customer> createCustomer(@RequestBody Customer Customer){
-		return new ResponseEntity<>(service.createCustomer(Customer), HttpStatus.CREATED);
+	public Status createCustomer(@RequestBody Customer customer) {
+//		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.CREATED);
+		return service.createCustomer(customer);
+
 
 	}
-
+	@CrossOrigin(origins = "http://localhost:3000")
 	
-	
-	@CrossOrigin(origins= "http://localhost:3000")
 	@PutMapping("/customer/{id}/deposit")
-	public ResponseEntity<Customer> depositCustomerById(@PathVariable int id, @RequestBody Customer Customer) throws ResourceNotFoundException{
-		return new ResponseEntity<>(service.depositCustomer(id, Customer), HttpStatus.OK);
+	public ResponseEntity<Customer> depositCustomerById(@PathVariable int id, @RequestBody Customer customer)
+			throws ResourceNotFoundException {
+		return new ResponseEntity<>(service.depositCustomer(id, customer), HttpStatus.OK);
 	}
-	
-	
-	@CrossOrigin(origins= "http://localhost:3000")
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping("/customer/{id}/withdraw")
-	public ResponseEntity<Customer> withdrawCustomerById(@PathVariable int id, @RequestBody Customer Customer) throws ResourceNotFoundException{
-		return new ResponseEntity<>(service.withdrawCustomer(id, Customer), HttpStatus.OK);
+	public ResponseEntity<Customer> withdrawCustomerById(@PathVariable int id, @RequestBody Customer customer)
+			throws ResourceNotFoundException {
+		return new ResponseEntity<>(service.withdrawCustomer(id, customer), HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
+
 //	
 //	@CrossOrigin(origins= "http://localhost:3000")
 //	@DeleteMapping("/customer/{id}")
@@ -86,9 +107,6 @@ public class CustomerController {
 ////		return new ResponseEntity<>(service.deleteCustomerById(id),HttpStatus.OK);
 //	}
 //	
-
 //	
-	
+
 }
-
-
