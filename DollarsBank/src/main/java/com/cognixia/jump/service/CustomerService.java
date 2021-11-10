@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
+import com.cognixia.jump.model.ActiveCustomersStorage;
 import com.cognixia.jump.model.Customer;
 import com.cognixia.jump.model.Status;
 import com.cognixia.jump.repository.CustomerRepository;
@@ -68,6 +69,7 @@ public class CustomerService {
             if (other.equals(customer)) {
                 customer.setLoggedIn(true);
                 repository.save(customer);
+                ActiveCustomersStorage.addCustomer(customer);
                 return Status.SUCCESS;
             }
         }
@@ -81,6 +83,8 @@ public class CustomerService {
 	      for (Customer other : customers) {
 	          if (other.equals(customer)) {
 	          	customer.setLoggedIn(false);
+                ActiveCustomersStorage.removeCustomer(customer);
+
 	              repository.save(customer);
 	              return Status.SUCCESS;
 	          }
