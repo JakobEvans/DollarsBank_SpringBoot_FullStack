@@ -6,6 +6,7 @@
 
 package com.cognixia.jump.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
@@ -15,7 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Customer {
+public class Customer implements Serializable{
+
+	
+	private static final long serialVersionUID = 1L;
 
 	final static private String passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$";
 

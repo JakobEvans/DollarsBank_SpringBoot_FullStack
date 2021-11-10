@@ -50,6 +50,19 @@ public class CustomerService {
 		return updated;	
 	}
 
+
+	public Customer depositCustomer(int id, Customer customer)throws ResourceNotFoundException {
+		findCustomerById(id);
+		Customer updated = repository.save(customer);
+		return updated;	
+	}
+	
+	
+	public Customer withdrawCustomer(int id, Customer customer)throws ResourceNotFoundException {
+		findCustomerById(id);
+		Customer updated = repository.save(customer);
+		return updated;	
+	}
 	
 //	public Customer updateCustomer(int id, Customer Customer) throws ResourceNotFoundException {
 //		findCustomerById(id);
