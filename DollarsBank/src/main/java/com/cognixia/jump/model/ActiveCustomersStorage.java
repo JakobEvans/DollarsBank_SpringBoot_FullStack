@@ -10,10 +10,10 @@ import antlr.collections.List;
 
  public final class ActiveCustomersStorage {
 
-    public static HashSet<Customer> customers;
+    public static HashMap<Integer, Customer> customers;
 
     public ActiveCustomersStorage() {
-        customers = new HashSet<Customer>();
+        customers = new HashMap<Integer, Customer>();
     }
 
     // standard getter and setter
@@ -24,16 +24,17 @@ import antlr.collections.List;
         return new ActiveCustomersStorage();
     }
 
-	public HashSet<Customer> getCustomers() {
+	public HashMap<Integer, Customer> getCustomers() {
 		return customers;
 	}
 
 	public static void addCustomer(Customer customer) {
-		customers.add(customer);
+		customers.putIfAbsent(customer.getId(), customer);
+
 	}
 	
 	public static void removeCustomer(Customer customer) {
-		customers.remove(customer);
+		customers.remove(customer.getId());
 	}
 }
 
