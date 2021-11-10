@@ -69,7 +69,7 @@ public class CustomerService {
             if (other.equals(customer)) {
                 customer.setLoggedIn(true);
                 repository.save(customer);
-                ActiveCustomersStorage.addCustomer(customer);
+//                ActiveCustomersStorage.addCustomer(customer);
                 return Status.SUCCESS;
             }
         }
@@ -79,17 +79,19 @@ public class CustomerService {
 	}
 	
 	public Status logout(Customer customer)  {
-		 List<Customer> customers = repository.findAll();
-	      for (Customer other : customers) {
-	          if (other.equals(customer)) {
-	          	customer.setLoggedIn(false);
-                ActiveCustomersStorage.removeCustomer(customer);
-
-	              repository.save(customer);
-	              return Status.SUCCESS;
-	          }
-	      }
-	      return Status.FAILURE;
+//		 List<Customer> customers = repository.findAll();
+//	      for (Customer other : customers) {
+//	          if (other.equals(customer)) {
+//	          	customer.setLoggedIn(false);
+////                ActiveCustomersStorage.removeCustomer(customer);
+//
+//	              repository.save(customer);
+//	              return Status.SUCCESS;
+//	          }
+//	      }
+//	      return Status.FAILURE;
+		customer.setLoggedIn(false);
+		return Status.SUCCESS;
 //		return customer;
 	  }
 	
