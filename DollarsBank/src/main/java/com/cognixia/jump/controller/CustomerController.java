@@ -44,7 +44,7 @@ public class CustomerController {
 	
 	
 	@CrossOrigin(origins= "http://localhost:3000")
-	@PutMapping("/Customer/{id}")
+	@PutMapping("/customer/{id}")
 	public ResponseEntity<Customer> updateCustomerById(@PathVariable int id, @RequestBody Customer Customer) throws ResourceNotFoundException{
 		return new ResponseEntity<>(service.updateCustomer(id, Customer), HttpStatus.OK);
 	}
@@ -63,13 +63,13 @@ public class CustomerController {
 	
 //	
 //	@CrossOrigin(origins= "http://localhost:3000")
-//	@DeleteMapping("/Customer/{id}")
+//	@DeleteMapping("/customer/{id}")
 //	public ResponseEntity<Customer> deleteCustomerById(@PathVariable int id) throws ResourceNotFoundException {
 ////		return new ResponseEntity<>(service.deleteCustomerById(id),HttpStatus.OK);
 //	}
 //	
 //	@CrossOrigin(origins= "http://localhost:3000")
-//	@PutMapping("/Customer/{id}")
+//	@PutMapping("/customer/{id}")
 //	public ResponseEntity<Customer> updateCustomerById(@PathVariable int id, @RequestBody Customer Customer) throws ResourceNotFoundException{
 ////		return new ResponseEntity<>(service.updateCustomer(id, Customer), HttpStatus.OK);
 //	}
