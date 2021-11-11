@@ -58,11 +58,11 @@ public class Customer implements Serializable{
 	@Column(name = "CURRENTBALANCE")
 	private Double currentBalance;
 
-	
+	//good
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Transaction> transactions;
 	
-	
+
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}

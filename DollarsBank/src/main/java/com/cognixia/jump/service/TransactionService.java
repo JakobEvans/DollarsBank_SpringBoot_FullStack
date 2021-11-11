@@ -28,9 +28,16 @@ public class TransactionService {
 	}
 
 	public Object createTransaction(Transaction transaction) {
+		
+		
+		
 		transaction.setId(-1);
 		Transaction created = repository.save(transaction);
+		
 		return created;
+	
+	
+	
 	}
 
 }

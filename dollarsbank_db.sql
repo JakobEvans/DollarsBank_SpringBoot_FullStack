@@ -44,6 +44,20 @@ VALUES
 `customer_id`)
 VALUES
 (1,  33,100,77,now(), 'status', 2);
+
+
+ INSERT INTO `dollarsbank_db`.`transaction`
+(
+`id`,
+`amount`,
+`balance_after`,
+`balance_before`,
+`date`,
+`status_message`,
+`customer_id`)
+VALUES
+(2,  15,115,100,now(), 'status', 2);
+ 
  
 
 

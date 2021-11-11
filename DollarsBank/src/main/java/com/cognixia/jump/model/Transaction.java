@@ -5,8 +5,11 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,11 +38,28 @@ public class Transaction {
 	@Column(name = "STATUS_MESSAGE")
 	private String statusMessage;
 	
+	//GOOD
+//	@ManyToOne
+//	@JoinColumn(name = "customerId")
+//	Customer customer;
+	
+	
+	
+	@JsonIgnoreProperties("transactions")
 	@ManyToOne
 	@JoinColumn(name = "customerId")
 	Customer customer;
 	
 	
+
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 
 	public Transaction(int id, Date date, Double amount, Double balanceBefore, Double balanceAfter,
 			String statusMessage, @NotNull Customer customer) {
