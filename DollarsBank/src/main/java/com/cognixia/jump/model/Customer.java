@@ -8,13 +8,17 @@ package com.cognixia.jump.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Customer implements Serializable{
@@ -30,7 +34,7 @@ public class Customer implements Serializable{
 	
 	@Id // Pk
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer customerId;
 
 	@Column(name = "NAME")
 	private String name;
@@ -41,7 +45,8 @@ public class Customer implements Serializable{
 	@Column(name = "PHONENUMBER")
 	private String phoneNumber;
 
-	@Column(name = "USERNAME")
+	
+	@Column(name = "USERNAME", unique = true)
 	private String username;
 
 	@Column(name = "PASSWORD")
@@ -52,6 +57,19 @@ public class Customer implements Serializable{
 
 	@Column(name = "CURRENTBALANCE")
 	private Double currentBalance;
+
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Transaction> transactions;
+	
+	
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
 
 	public Customer(String name, String address, String phoneNumber, String username, String password,
 			Double initialDeposit, Double currentBalance) {
@@ -129,13 +147,13 @@ public class Customer implements Serializable{
 	   
 	    @Override
 	    public int hashCode() {
-	        return Objects.hash(id, username, password 
+	        return Objects.hash(customerId, username, password 
 	                            );
 	    }
 	
 	public String toJson() {
 		
-		return "{\"id\" : " + id
+		return "{\"customerId\" : " + customerId
 				+ ", \"username\" : \"" + username + "\""
 				+ ", \"password\" : \"" + password + "\"" +
 		"}";
@@ -161,11 +179,11 @@ public class Customer implements Serializable{
 
 
 	public Integer getId() {
-		return id;
+		return customerId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setId(Integer customerId) {
+		this.customerId = customerId;
 	}
 
 	public String getName() {
@@ -186,7 +204,7 @@ public class Customer implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Customer [customerId=" + id + ", name=" + name + ", address=" + address + ", phoneNumber="
+		return "Customer [customerId=" + customerId + ", name=" + name + ", address=" + address + ", phoneNumber="
 				+ phoneNumber + ", username=" + username + ", password=" + password + ", initialDeposit="
 				+ initialDeposit + ", currentBalance=" + currentBalance + "]";
 	}

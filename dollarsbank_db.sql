@@ -6,7 +6,7 @@ use dollarsbank_db;
 
 
 INSERT INTO `dollarsbank_db`.`customer`
-(`id`,
+(`customer_id`,
 `address`,
 `currentbalance`,
 `inititaldeposit`,
@@ -20,7 +20,7 @@ VALUES
  
  
 INSERT INTO `dollarsbank_db`.`customer`
-(`id`,
+(`customer_id`,
 `address`,
 `currentbalance`,
 `inititaldeposit`,

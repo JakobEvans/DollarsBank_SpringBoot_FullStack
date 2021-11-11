@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
 import com.cognixia.jump.model.Customer;
+import com.cognixia.jump.model.Transaction;
 import com.cognixia.jump.service.CustomerService;
+import com.cognixia.jump.service.TransactionService;
 
 @RestController
 @RequestMapping("/api")
@@ -27,6 +29,12 @@ public class CustomerController {
 	@Autowired
 	CustomerService service;
 
+	
+	
+
+	
+	
+	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
@@ -68,15 +76,12 @@ public class CustomerController {
 	
 	
 //
-//	@CrossOrigin(origins = "http://localhost:3000")
-//	@PostMapping("/customer")
-//	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-////		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.CREATED);
-//		return service.createCustomer(customer);
-//
-//
-//	}
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PostMapping("/customer")
+	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
+		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.CREATED);
 
+	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	

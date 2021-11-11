@@ -2,6 +2,7 @@ package com.cognixia.jump.service;
 
 import java.util.HashMap;
 
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
 import com.cognixia.jump.model.Customer;
+import com.cognixia.jump.model.Transaction;
 import com.cognixia.jump.repository.CustomerRepository;
 
 @Service
@@ -54,7 +56,12 @@ public class CustomerService {
 //		return customer;
 	  }
 	
-	
+
+	public Customer createCustomer(Customer customer) {
+		customer.setId(-1);
+		Customer created = repository.save(customer);
+		return created;
+	}
 	
 	
 	

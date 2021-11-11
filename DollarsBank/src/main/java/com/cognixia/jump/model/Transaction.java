@@ -2,18 +2,22 @@ package com.cognixia.jump.model;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Transaction {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "DATE")
 	private LocalDate date;
@@ -29,9 +33,15 @@ public class Transaction {
 	
 	@Column(name = "STATUS_MESSAGE")
 	private String statusMessage;
+	
+	@ManyToOne
+	@JoinColumn(name = "customerId")
+	Customer customer;
+	
+	
 
 	public Transaction(int id, LocalDate date, Double amount, Double balanceBefore, Double balanceAfter,
-			String statusMessage) {
+			String statusMessage, @NotNull Customer customer) {
 		super();
 		this.id = id;
 		this.date = date;
@@ -39,6 +49,7 @@ public class Transaction {
 		this.balanceBefore = balanceBefore;
 		this.balanceAfter = balanceAfter;
 		this.statusMessage = statusMessage;
+		this.customer = customer;
 	}
 
 	public int getId() {
