@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
 import com.cognixia.jump.model.Transaction;
+import com.cognixia.jump.model.TransactionRequest;
 import com.cognixia.jump.service.TransactionService;
 
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
 	
-	
-
 	@Autowired
 	TransactionService service;
 
@@ -51,5 +50,17 @@ public class TransactionController {
 	public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction){
 		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
 
+	}
+
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PostMapping("/transaction/deposit")
+	public ResponseEntity<?> makeDeposit(@RequestBody TransactionRequest request) {
+		Transaction result = service.makeDeposit(request.getAmount(), request.getCustomerId());
+		// if the result is null, return an error
+		if(result == null) {
+			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found.");
+		}
+		// success
+		return ResponseEntity.status(201).body(result);		
 	}
 }
