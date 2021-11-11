@@ -44,4 +44,12 @@ public class TransactionController {
 //		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
 //
 //	}
+	
+	
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PostMapping("/transaction")
+	public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction){
+		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
+
+	}
 }

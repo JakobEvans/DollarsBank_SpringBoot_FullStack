@@ -15,7 +15,7 @@ INSERT INTO `dollarsbank_db`.`customer`
 `phonenumber`,
 `username`)
 VALUES
-(1,  '112 Place dr',0, 77, 'Billy Bob','password', '111-111-1111','username1');
+(1,  '112 Place dr',77, 77, 'Billy Bob','password', '111-111-1111','username1');
  
  
  
@@ -29,6 +29,21 @@ INSERT INTO `dollarsbank_db`.`customer`
 `phonenumber`,
 `username`)
 VALUES
-(2,  '333 Other dr',0, 77, 'Other Guy','password', '111-111-1111','username2');
+(2,  '333 Other dr',77, 77, 'Other Guy','password', '111-111-1111','username2');
  
+ 
+ 
+ INSERT INTO `dollarsbank_db`.`transaction`
+(
+`id`,
+`amount`,
+`balance_after`,
+`balance_before`,
+`date`,
+`status_message`,
+`customer_id`)
+VALUES
+(1,  33,100,77,now(), 'status', 2);
+ 
+
 

@@ -1,6 +1,7 @@
 package com.cognixia.jump.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,7 +21,7 @@ public class Transaction {
 	private Integer id;
 	
 	@Column(name = "DATE")
-	private LocalDate date;
+	private Date date;
 	
 	@Column(name = "AMOUNT")
 	private Double amount;
@@ -40,7 +41,7 @@ public class Transaction {
 	
 	
 
-	public Transaction(int id, LocalDate date, Double amount, Double balanceBefore, Double balanceAfter,
+	public Transaction(int id, Date date, Double amount, Double balanceBefore, Double balanceAfter,
 			String statusMessage, @NotNull Customer customer) {
 		super();
 		this.id = id;
@@ -51,6 +52,18 @@ public class Transaction {
 		this.statusMessage = statusMessage;
 		this.customer = customer;
 	}
+	
+	public Transaction() {
+		super();
+//		this.id = id;
+		this.date = new Date();
+		this.amount = 0.0;
+		this.balanceBefore = 0.0;
+		this.balanceAfter = 0.0;
+		this.statusMessage = "N/A";
+		this.customer = new Customer();
+		
+	}
 
 	public int getId() {
 		return id;
@@ -60,11 +73,11 @@ public class Transaction {
 		this.id = id;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
