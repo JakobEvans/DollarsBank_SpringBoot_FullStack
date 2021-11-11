@@ -38,10 +38,10 @@ public class TransactionController {
 		return new ResponseEntity<>(service.findTransactionById(id),HttpStatus.OK);
 	}
 	
-	@CrossOrigin(origins= "http://localhost:3000")
-	@PostMapping("/customer")
-	public ResponseEntity<?> createCustomer(@RequestBody Transaction transaction){
-		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
-
-	}
+//	@CrossOrigin(origins= "http://localhost:3000")
+//	@PostMapping("/customer")
+//	public ResponseEntity<?> createCustomer(@RequestBody Transaction transaction){
+//		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
+//
+//	}
 }
