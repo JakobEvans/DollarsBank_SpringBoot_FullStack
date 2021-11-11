@@ -9,7 +9,7 @@ import com.cognixia.jump.model.Customer;
 @Repository
 @EntityScan(basePackages = "com.cognixia.jump.model")
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
-	//User findByUserId(Integer userId);
+	Customer findByUsername(String username);
 }
 
 

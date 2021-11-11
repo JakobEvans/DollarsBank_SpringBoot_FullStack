@@ -2,6 +2,7 @@ package com.cognixia.jump.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
 import com.cognixia.jump.model.Customer;
-import com.cognixia.jump.model.Status;
 import com.cognixia.jump.service.CustomerService;
 
 @RestController
@@ -46,24 +46,24 @@ public class CustomerController {
 		return new ResponseEntity<>(service.updateCustomer(id, customer), HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/customer/login")
-	public Status loginCustomer(@RequestBody Customer customer)throws ResourceNotFoundException {
-//		return new ResponseEntity<>(service.login(customer), HttpStatus.OK);
-		return service.login(customer);
-
-	
-	}
-	
-	
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/customer/logout")
-    public Status logUserOut(@RequestBody Customer customer) {
+//	@CrossOrigin(origins = "http://localhost:3000")
+//	@PostMapping("/customer/login")
+//	public Status loginCustomer(@RequestBody Customer customer)throws ResourceNotFoundException {
+////		return new ResponseEntity<>(service.login(customer), HttpStatus.OK);
+//		return service.login(customer);
+//
+//	
+//	}
+//	
+//	
+//	
+//	@CrossOrigin(origins = "http://localhost:3000")
+//    @PostMapping("/customer/logout")
+//    public Status logoutCustomer(@RequestBody Customer customer) {
 //		return new ResponseEntity<>(service.logout(customer), HttpStatus.OK);
-		return service.logout(customer);
-
-    }
+////		return service.logout(customer);
+//
+//    }
 	
 	
 	
@@ -77,14 +77,7 @@ public class CustomerController {
 //
 //	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/customer")
-	public Status createCustomer(@RequestBody Customer customer) {
-//		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.CREATED);
-		return service.createCustomer(customer);
 
-
-	}
 	@CrossOrigin(origins = "http://localhost:3000")
 	
 	@PutMapping("/customer/{id}/deposit")

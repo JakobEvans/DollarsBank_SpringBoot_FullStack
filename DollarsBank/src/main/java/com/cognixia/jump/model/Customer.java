@@ -20,14 +20,12 @@ import javax.persistence.Id;
 public class Customer implements Serializable{
 
 	
-	private static final long serialVersionUID = 1L;
 
 	final static private String passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$";
 
 	final static private String phoneNumberRegex = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
 
 	
-    private boolean loggedIn;
 
 	
 	@Id // Pk
@@ -72,7 +70,6 @@ public class Customer implements Serializable{
 
 		this.currentBalance = currentBalance;
 		
-		this.loggedIn = false;
 
 	}
 
@@ -116,12 +113,7 @@ public class Customer implements Serializable{
 		this.address = address;
 	}
 	
-	 public boolean isLoggedIn() {
-	        return loggedIn;
-	    }
-	    public void setLoggedIn(boolean loggedIn) {
-	        this.loggedIn = loggedIn;
-	    }
+
 
 	   @Override
 	    public boolean equals(Object o) {
@@ -137,8 +129,8 @@ public class Customer implements Serializable{
 	   
 	    @Override
 	    public int hashCode() {
-	        return Objects.hash(id, username, password, 
-	                            loggedIn);
+	        return Objects.hash(id, username, password 
+	                            );
 	    }
 	
 	public String toJson() {
@@ -165,7 +157,6 @@ public class Customer implements Serializable{
 
 		this.currentBalance = 0.0;
 		
-		this.loggedIn = false;
 	}
 
 
