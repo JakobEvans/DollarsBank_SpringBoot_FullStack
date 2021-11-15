@@ -88,10 +88,6 @@ public class CustomerController {
 ////		return service.logout(customer);
 //
 //    }
-	
-	
-	
-//
 
 
 //	
