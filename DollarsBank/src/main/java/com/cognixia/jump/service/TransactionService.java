@@ -26,5 +26,18 @@ public class TransactionService {
 		Transaction created = repository.save(transaction);
 		return created;
 	}
+	
+	public List<Transaction> viewLastFiveTransactions(List<Transaction> transactions) {
+		
+		List<Transaction> lastFiveTransactions = null;
+		
+		if (transactions.size() > 5) {
+			lastFiveTransactions = transactions.subList(transactions.size() - 5, transactions.size() - 1);
+			
+		};
+		
+		return lastFiveTransactions;
+			
+	}
 
 }
