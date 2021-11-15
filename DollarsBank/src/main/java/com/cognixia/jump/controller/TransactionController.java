@@ -73,7 +73,7 @@ public class TransactionController {
 	@CrossOrigin(origins= "http://localhost:3000")
 	@PostMapping("/transaction/withdraw")
 	public ResponseEntity<?> makeWithdrawl(@RequestBody TransactionRequest request) {
-		Transaction result = service.makeWithdrawl(request.getAmount(), request.getCustomerId());
+		Transaction result = service.makeWithdrawal(request.getAmount(), request.getCustomerId());
 		// if the result is null, return an error
 		if(result == null) {
 			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found.");

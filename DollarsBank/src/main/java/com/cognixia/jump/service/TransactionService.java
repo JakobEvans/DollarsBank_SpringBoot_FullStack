@@ -15,8 +15,7 @@ import com.cognixia.jump.repository.TransactionRepository;
 
 @Service
 public class TransactionService {
-	
-	
+
 	@Autowired
 	TransactionRepository repository;
 
@@ -29,65 +28,71 @@ public class TransactionService {
 
 	public Transaction findTransactionById(int id) throws ResourceNotFoundException {
 		Optional<Transaction> found = repository.findById(id);
-		if(found.isPresent()) {
+		if (found.isPresent()) {
 			return found.get();
 		}
 		return null;
 	}
-	public Transaction makeWithdrawl(double amount, int customerId) {
+
+	public Transaction makeWithdrawal(double amount, int customerId) {
+
 		// make sure the Customer exists
 		Optional<Customer> customerFound = customerRepo.findById(customerId);
 		// if customerFound is null, then the Customer is invalid
-		if(!customerFound.isPresent()) {
+		if (!customerFound.isPresent()) {
 			// Customer ID invalid
 			return null;
 		}
 		Customer customer = customerFound.get();
 		// make sure the amount isn't zero
-		if(amount == 0.0) {
+		if (amount == 0.0) {
 			return null;
 		}
 		// make sure the amount is positive
-		if(amount < 0) {
+		if (amount < 0) {
 			amount = amount * -1;
 		}
 		double currentBalance = customer.getCurrentBalance();
-		
-		
+
 		double balanceAfter = currentBalance - amount;
 
-//		cannot make the transaction
-		if(balanceAfter < 0) {
+//						cannot make the transaction
+		if (balanceAfter < 0) {
 			return null;
 		}
-		
-		Transaction withdrawl = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, 
-								"Withdrawl", customer);
-		return repository.save(withdrawl);
+
+		Transaction withdrawal = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, "Withdraw",
+				customer);
+		// update the Customer with the new balance
+		customer.setCurrentBalance(balanceAfter);
+		// save the customer
+		customerRepo.save(customer);
+		// save and return the transaction
+		return repository.save(withdrawal);
 	}
-	
-	//goog\d
+
+	// goog\d
 	public Transaction makeDeposit(double amount, int customerId) {
 		// make sure the Customer exists
 		Optional<Customer> customerFound = customerRepo.findById(customerId);
 		// if customerFound is null, then the Customer is invalid
-		if(!customerFound.isPresent()) {
+		if (!customerFound.isPresent()) {
 			// Customer ID invalid
 			return null;
 		}
 		Customer customer = customerFound.get();
 		// make sure the amount isn't zero
-		if(amount == 0.0) {
+		if (amount == 0.0) {
 			return null;
 		}
 		// make sure the amount is positive
-		if(amount < 0) {
+		if (amount < 0) {
 			amount = amount * -1;
 		}
 		double currentBalance = customer.getCurrentBalance();
 		double balanceAfter = currentBalance + amount;
-		Transaction deposit = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, 
-								"Deposit", customer);
+		Transaction deposit = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, "Deposit",
+				customer);
 		// update the Customer with the new balance
 		customer.setCurrentBalance(balanceAfter);
 		// save the customer
@@ -95,26 +100,21 @@ public class TransactionService {
 		// save and return the transaction
 		return repository.save(deposit);
 	}
-	
-	
-	
-	
-	
 
-	public Transaction createTransaction(Transaction transaction) {		
+	public Transaction createTransaction(Transaction transaction) {
 		// make sure the Customer exists
 		Integer customerId = transaction.getCustomer().getId();
 		Optional<Customer> customerFound = customerRepo.findById(customerId);
 		// if customerFound is null, then the Customer is invalid
-		if(!customerFound.isPresent()) {
+		if (!customerFound.isPresent()) {
 			// Customer ID invalid
 			return null;
 		}
 		// otherwise, the Customer is found
 		transaction.setId(-1);
 		Transaction created = repository.save(transaction);
-		
-		return created;	
+
+		return created;
 	}
 
 }
