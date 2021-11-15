@@ -20,18 +20,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-@Entity
-public class Customer implements Serializable{
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-	
+@Entity
+public class Customer implements Serializable {
 
 	final static private String passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$";
 
 	final static private String phoneNumberRegex = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
 
-	
-
-	
 	@Id // Pk
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer customerId;
@@ -45,10 +44,10 @@ public class Customer implements Serializable{
 	@Column(name = "PHONENUMBER")
 	private String phoneNumber;
 
-	
 	@Column(name = "USERNAME", unique = true)
 	private String username;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "PASSWORD")
 	private String password;
 
@@ -58,10 +57,20 @@ public class Customer implements Serializable{
 	@Column(name = "CURRENTBALANCE")
 	private Double currentBalance;
 
-	//good
+	public String customerData() {
+
+		return "{\"customerId\" : " + customerId + ", \"username\" : \"" + username + "\"" + ", \"name\" : \"" + name
+				+ "\""
+
+				+ ", \"address\" : \"" + address + "\""
+
+				+ ", \"phoneNumber\" : \"" + phoneNumber + "\"" + ", \"initialDeposit\" : \"" + initialDeposit + "\""
+				+ ", \"currentBalance\" : \"" + currentBalance + "\"" +"}";
+	}
+
+	// good
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Transaction> transactions;
-	
 
 	public List<Transaction> getTransactions() {
 		return transactions;
@@ -87,7 +96,6 @@ public class Customer implements Serializable{
 		this.initialDeposit = initialDeposit;
 
 		this.currentBalance = currentBalance;
-		
 
 	}
 
@@ -130,33 +138,28 @@ public class Customer implements Serializable{
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Customer))
+			return false;
 
-	   @Override
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (!(o instanceof Customer)) return false;
-	        
-	        Customer customer = (Customer) o;
-	        
-	        return Objects.equals(username, customer.username) &&
-	                Objects.equals(password, customer.password);
-	    }
-	   
-	   
-	    @Override
-	    public int hashCode() {
-	        return Objects.hash(customerId, username, password 
-	                            );
-	    }
-	
+		Customer customer = (Customer) o;
+
+		return Objects.equals(username, customer.username) && Objects.equals(password, customer.password);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(customerId, username, password);
+	}
+
 	public String toJson() {
-		
-		return "{\"customerId\" : " + customerId
-				+ ", \"username\" : \"" + username + "\""
-				+ ", \"password\" : \"" + password + "\"" +
-		"}";
+
+		return "{\"customerId\" : " + customerId + ", \"username\" : \"" + username + "\"" + ", \"password\" : \""
+				+ password + "\"" + "}";
 	}
 
 	public Customer() {
@@ -167,16 +170,15 @@ public class Customer implements Serializable{
 		this.address = "N/A";
 
 		this.phoneNumber = "0000000000";
-		
+
 		this.username = "N/A";
 
 		this.password = "N/A";
 		this.initialDeposit = 0.0;
 
 		this.currentBalance = 0.0;
-		
-	}
 
+	}
 
 	public Integer getId() {
 		return customerId;
@@ -208,7 +210,5 @@ public class Customer implements Serializable{
 				+ phoneNumber + ", username=" + username + ", password=" + password + ", initialDeposit="
 				+ initialDeposit + ", currentBalance=" + currentBalance + "]";
 	}
-
-	
 
 }

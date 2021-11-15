@@ -34,7 +34,39 @@ public class TransactionService {
 		}
 		return null;
 	}
+	public Transaction makeWithdrawl(double amount, int customerId) {
+		// make sure the Customer exists
+		Optional<Customer> customerFound = customerRepo.findById(customerId);
+		// if customerFound is null, then the Customer is invalid
+		if(!customerFound.isPresent()) {
+			// Customer ID invalid
+			return null;
+		}
+		Customer customer = customerFound.get();
+		// make sure the amount isn't zero
+		if(amount == 0.0) {
+			return null;
+		}
+		// make sure the amount is positive
+		if(amount < 0) {
+			amount = amount * -1;
+		}
+		double currentBalance = customer.getCurrentBalance();
+		
+		
+		double balanceAfter = currentBalance - amount;
 
+//		cannot make the transaction
+		if(balanceAfter < 0) {
+			return null;
+		}
+		
+		Transaction withdrawl = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, 
+								"Withdrawl", customer);
+		return repository.save(withdrawl);
+	}
+	
+	//goog\d
 	public Transaction makeDeposit(double amount, int customerId) {
 		// make sure the Customer exists
 		Optional<Customer> customerFound = customerRepo.findById(customerId);
@@ -63,6 +95,11 @@ public class TransactionService {
 		// save and return the transaction
 		return repository.save(deposit);
 	}
+	
+	
+	
+	
+	
 
 	public Transaction createTransaction(Transaction transaction) {		
 		// make sure the Customer exists
