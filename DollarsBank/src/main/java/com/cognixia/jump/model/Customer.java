@@ -21,6 +21,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 public class Customer implements Serializable {
@@ -45,6 +47,7 @@ public class Customer implements Serializable {
 	@Column(name = "USERNAME", unique = true)
 	private String username;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "PASSWORD")
 	private String password;
 
@@ -62,7 +65,7 @@ public class Customer implements Serializable {
 				+ ", \"address\" : \"" + address + "\""
 
 				+ ", \"phoneNumber\" : \"" + phoneNumber + "\"" + ", \"initialDeposit\" : \"" + initialDeposit + "\""
-				+ ", \"currentBalance\" : \"" + currentBalance + "\"";
+				+ ", \"currentBalance\" : \"" + currentBalance + "\"" +"}";
 	}
 
 	// good

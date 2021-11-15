@@ -30,14 +30,14 @@ public class CustomerController {
 	CustomerService service;
 
 	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/customer/data/{id}")
+	public ResponseEntity<String> getCustomerDataById(@PathVariable int id) throws ResourceNotFoundException {
+		return new ResponseEntity<>(service.customerDataById(id), HttpStatus.OK);
+	}
+
 	
 	
-//	@CrossOrigin(origins = "http://localhost:3000")
-//	@GetMapping("/customer/{id}")
-//	public ResponseEntity<Customer> getCustomerDataById(@PathVariable int id)
-//			throws ResourceNotFoundException {
-//		return new ResponseEntity<>(service.customerDataById(id), HttpStatus.OK);
-//	}
 
 	// gets all the other customers (all other customers except current passed in id)
 	@CrossOrigin(origins = "http://localhost:3000")
