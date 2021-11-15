@@ -56,6 +56,11 @@ public class TransactionService {
 		double balanceAfter = currentBalance + amount;
 		Transaction deposit = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, 
 								"Deposit", customer);
+		// update the Customer with the new balance
+		customer.setCurrentBalance(balanceAfter);
+		// save the customer
+		customerRepo.save(customer);
+		// save and return the transaction
 		return repository.save(deposit);
 	}
 

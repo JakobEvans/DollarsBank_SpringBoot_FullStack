@@ -3,7 +3,8 @@ drop database if exists dollarsbank_db;
 create database dollarsbank_db;
 use dollarsbank_db;
 
-
+select * from customer;
+select * from transaction;
 
 INSERT INTO `dollarsbank_db`.`customer`
 (`customer_id`,
