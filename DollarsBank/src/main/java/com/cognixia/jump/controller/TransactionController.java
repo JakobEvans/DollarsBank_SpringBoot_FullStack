@@ -63,4 +63,16 @@ public class TransactionController {
 		// success
 		return ResponseEntity.status(201).body(result);		
 	}
+
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PostMapping("/transaction/withdrawl")
+	public ResponseEntity<?> makeWithdrawl(@RequestBody TransactionRequest request) {
+		Transaction result = service.makeWithdrawl(request.getAmount(), request.getCustomerId());
+		// if the result is null, return an error
+		if(result == null) {
+			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found.");
+		}
+		// success
+		return ResponseEntity.status(201).body(result);		
+	}
 }
