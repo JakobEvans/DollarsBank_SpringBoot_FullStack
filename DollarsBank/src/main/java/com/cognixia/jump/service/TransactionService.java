@@ -77,7 +77,7 @@ public class TransactionService {
 			amount = amount * -1;
 		}
 		double currentBalance = customer.getCurrentBalance();
-		double balanceAfter = currentBalance + amount;
+		double balanceAfter = currentBalance - amount;
 		Transaction withdrawl = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, 
 								"Withdrawl", customer);
 		return repository.save(withdrawl);
