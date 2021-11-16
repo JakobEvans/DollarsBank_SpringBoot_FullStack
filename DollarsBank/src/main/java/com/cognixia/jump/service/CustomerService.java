@@ -23,8 +23,6 @@ public class CustomerService {
 	@Autowired
 	CustomerRepository repository;
 
-	
-
 	public Customer createCustomer(Customer customer) {
 		customer.setId(-1);
 		Customer created = repository.save(customer);

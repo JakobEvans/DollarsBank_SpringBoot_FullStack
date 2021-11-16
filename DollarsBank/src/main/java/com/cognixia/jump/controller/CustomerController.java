@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.ResourceNotFoundException;
+import com.cognixia.jump.model.AuthenticationRequest;
 import com.cognixia.jump.model.Customer;
+import com.cognixia.jump.model.MyUserDetails;
 import com.cognixia.jump.model.Transaction;
 import com.cognixia.jump.service.CustomerService;
+import com.cognixia.jump.service.MyUserDetailsService;
 import com.cognixia.jump.service.TransactionService;
+import com.cognixia.jump.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -28,6 +35,44 @@ public class CustomerController {
 
 	@Autowired
 	CustomerService service;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private MyUserDetailsService myUserDetailsService;
+
+	@Autowired
+	private JwtUtil jwtUtil;
+
+	@PostMapping("/login")
+	public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequest authRequest) throws Exception {
+		
+		// will catch the exception for bad credentials and...
+		try {
+			// make sure we can authenticate our user based on the username and password
+			authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+					);
+		} catch(BadCredentialsException e) {
+			
+			//...then provide own message as to why user could not be authenticated
+			throw new Exception("Incorrect username or password");
+		}
+		
+		// as long as user is found, we can create the JWT
+		
+		// find the user
+		final MyUserDetails userDetails = myUserDetailsService.loadUserByUsername(authRequest.getUsername());
+		//User userFound = service.getUserByUsername(authRequest.getUsername());
+		
+		// generate token for this user
+		final String jwt = jwtUtil.generateTokens(userDetails);
+		
+		// return token
+		return ResponseEntity.status(200).body( jwt );
+		
+	}
 
 	
 	@CrossOrigin(origins = "http://localhost:3000")

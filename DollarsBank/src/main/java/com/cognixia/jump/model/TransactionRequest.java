@@ -1,20 +1,14 @@
 package com.cognixia.jump.model;
 
 public class TransactionRequest {
-    private int customerId;
     private double amount;
 
-    public TransactionRequest(int customerId, double amount) {
-        this.customerId = customerId;
+    public TransactionRequest() {
+        this.amount = 0.0;
+    }
+
+    public TransactionRequest(double amount) {
         this.amount = amount;
-    }
-
-    public int getCustomerId() {
-        return this.customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public double getAmount() {
@@ -28,9 +22,9 @@ public class TransactionRequest {
     @Override
     public String toString() {
         return "{" +
-            " customerId='" + getCustomerId() + "'" +
-            ", amount='" + getAmount() + "'" +
+            " amount='" + getAmount() + "'" +
             "}";
     }
+    
 
 }

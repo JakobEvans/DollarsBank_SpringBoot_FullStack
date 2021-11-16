@@ -61,8 +61,6 @@ public class TransactionService {
 
 		double balanceAfter = currentBalance - amount;
 
-
-
 		Transaction withdrawal = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, "Withdraw",
 				customer);
 		// update the Customer with the new balance
@@ -195,6 +193,21 @@ public class TransactionService {
 		Transaction created = transactionRepo.save(transaction);
 
 		return created;
+	}
+
+	/**
+	 * Gets the Customer ID from an account using its username. 
+	 * Returns -1 if no customer is found.
+	 * @param username String - The Customer's unique username.
+	 * @return int - The Customer ID, or -1 if none is found.
+	 */
+	public int getCustomerIdByUsername(String username) {
+		Customer found = customerRepo.findByUsername(username);
+		// if no customer is found, return -1
+		if(found == null) {
+			return -1;
+		}
+		return found.getId();
 	}
 
 }
