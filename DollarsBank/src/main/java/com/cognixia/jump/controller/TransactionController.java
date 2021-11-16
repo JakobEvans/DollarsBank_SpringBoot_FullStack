@@ -105,7 +105,7 @@ public class TransactionController {
 	
 	
 	@CrossOrigin(origins= "http://localhost:3000")
-	@PostMapping("/transaction/withdraw")
+	@PostMapping("/transaction/history")
 	public ResponseEntity<?> last5Transactions(
 							@RequestHeader (name = "Authorization") String token) {
 
