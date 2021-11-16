@@ -93,6 +93,7 @@ public class TransactionController {
 	@PostMapping("/transaction/transfer")
 	public ResponseEntity<?> makeTransfer(@RequestBody TransactionTransferRequest request) {
 		Transaction result = service.makeTransfer(request.getAmount(), request.getCustomerId(), request.getRecieverId());
+		// **SHould do error handling for withdrawing to much when you dont have funds**
 		// if the result is null, return an error
 		if(result == null) {
 			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found. or invalid funds");
