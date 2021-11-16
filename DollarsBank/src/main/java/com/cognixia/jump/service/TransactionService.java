@@ -185,6 +185,13 @@ public class TransactionService {
 	
 public List<Transaction> viewLastFiveTransactions(int customerId) {
 		
+		Optional<Customer> customerFound = customerRepo.findById(customerId);
+		// if customerFound is null, then the Customer is invalid
+		if (!customerFound.isPresent()) {
+			// Customer ID invalid
+			return null;
+		}
+		
 		List<Transaction> lastFiveTransactions = null;
 		return lastFiveTransactions;
 //		
