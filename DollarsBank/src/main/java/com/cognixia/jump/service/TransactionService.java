@@ -17,17 +17,17 @@ import com.cognixia.jump.repository.TransactionRepository;
 public class TransactionService {
 
 	@Autowired
-	TransactionRepository repository;
+	TransactionRepository transactionRepo;
 
 	@Autowired
 	CustomerRepository customerRepo;
 
 	public List<Transaction> findAllTransactions() {
-		return repository.findAll();
+		return transactionRepo.findAll();
 	}
 
 	public Transaction findTransactionById(int id) throws ResourceNotFoundException {
-		Optional<Transaction> found = repository.findById(id);
+		Optional<Transaction> found = transactionRepo.findById(id);
 		if (found.isPresent()) {
 			return found.get();
 		}
@@ -53,13 +53,15 @@ public class TransactionService {
 			amount = amount * -1;
 		}
 		double currentBalance = customer.getCurrentBalance();
+		
+//		cannot make the transaction if it overdraws you
+		if (currentBalance < amount) {
+			return null;
+		}
 
 		double balanceAfter = currentBalance - amount;
 
-//						cannot make the transaction
-		if (balanceAfter < 0) {
-			return null;
-		}
+
 
 		Transaction withdrawal = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, "Withdraw",
 				customer);
@@ -68,7 +70,7 @@ public class TransactionService {
 		// save the customer
 		customerRepo.save(customer);
 		// save and return the transaction
-		return repository.save(withdrawal);
+		return transactionRepo.save(withdrawal);
 	}
 
 	// goog\d
@@ -98,7 +100,85 @@ public class TransactionService {
 		// save the customer
 		customerRepo.save(customer);
 		// save and return the transaction
-		return repository.save(deposit);
+		return transactionRepo.save(deposit);
+	}
+	
+	
+	public Transaction makeTransfer(double amount, int customerId, int otherCustomerId) {
+		// make sure the Customer exists
+		Optional<Customer> customerFound = customerRepo.findById(customerId);
+		
+		Optional<Customer> otherCustomerFound = customerRepo.findById(otherCustomerId);
+
+		
+		// if customerFound is null, then the Customer is invalid
+		if (!customerFound.isPresent() || !otherCustomerFound.isPresent()) {
+			// Customer ID invalid
+			return null;
+		}
+		
+		// The customer whos sending the money transfer
+		Customer customer_sender = customerFound.get();
+		
+		// The customer whos recieving the money transfer
+		Customer customer_reciever = otherCustomerFound.get();
+
+		// make sure the amount isn't zero
+		if (amount == 0.0) {
+			return null;
+		}
+		// make sure the amount is positive
+		if (amount < 0) {
+			amount = amount * -1;
+		}
+		
+		
+		
+		// ************ SENDING side of transfer ************
+
+		
+		double currentBalance_sender = customer_sender.getCurrentBalance();
+		
+//		cannot make the transaction if it overdraws you
+		if (currentBalance_sender < amount) {
+			return null;
+		}
+		
+		
+		// must take the amount out of their account
+		double balanceAfter_sender = currentBalance_sender - amount;
+
+	
+		
+		Transaction transferSend = new Transaction(-1, new Date(), amount, currentBalance_sender, balanceAfter_sender, "TransferSender",
+				customer_sender);
+		
+		
+		
+		// update the Customer with the new balance
+		customer_sender.setCurrentBalance(balanceAfter_sender);
+		
+		
+		// ************ Receiving side of transfer ************
+		
+		double currentBalance_reciever = customer_reciever.getCurrentBalance();
+		
+		
+		double balanceAfter_reciever = currentBalance_reciever + amount;
+		
+		
+		Transaction transferRecieve = new Transaction(-1, new Date(), amount, currentBalance_reciever, balanceAfter_reciever, "TransferReciever",
+				customer_reciever);
+		
+		customer_reciever.setCurrentBalance(balanceAfter_reciever);
+		
+		// save the customer
+		customerRepo.save(customer_sender);
+		customerRepo.save(customer_reciever);
+		transactionRepo.save(transferRecieve);
+		// save and return the transaction
+		return transactionRepo.save(transferSend);
+		
 	}
 
 	public Transaction createTransaction(Transaction transaction) {
@@ -112,7 +192,7 @@ public class TransactionService {
 		}
 		// otherwise, the Customer is found
 		transaction.setId(-1);
-		Transaction created = repository.save(transaction);
+		Transaction created = transactionRepo.save(transaction);
 
 		return created;
 	}

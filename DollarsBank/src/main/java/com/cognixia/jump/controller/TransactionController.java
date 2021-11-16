@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cognixia.jump.exception.ResourceNotFoundException;
 import com.cognixia.jump.model.Transaction;
 import com.cognixia.jump.model.TransactionRequest;
+import com.cognixia.jump.model.TransactionTransferRequest;
 import com.cognixia.jump.service.TransactionService;
 
 @RestController
@@ -76,7 +77,25 @@ public class TransactionController {
 		Transaction result = service.makeWithdrawal(request.getAmount(), request.getCustomerId());
 		// if the result is null, return an error
 		if(result == null) {
-			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found.");
+			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found. OR invalid funds");
+		}
+		// success
+		return ResponseEntity.status(201).body(result);		
+		
+		
+		
+		
+		
+	}
+	
+	
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PostMapping("/transaction/transfer")
+	public ResponseEntity<?> makeTransfer(@RequestBody TransactionTransferRequest request) {
+		Transaction result = service.makeTransfer(request.getAmount(), request.getCustomerId(), request.getRecieverId());
+		// if the result is null, return an error
+		if(result == null) {
+			return ResponseEntity.status(404).body("Error: Customer with ID " + request.getCustomerId() + " not found. or invalid funds");
 		}
 		// success
 		return ResponseEntity.status(201).body(result);		
