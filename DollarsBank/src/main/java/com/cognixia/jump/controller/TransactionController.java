@@ -1,5 +1,6 @@
 package com.cognixia.jump.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -102,6 +103,25 @@ public class TransactionController {
 		return ResponseEntity.status(201).body(result);		
 	}
 	
+	
+	@CrossOrigin(origins= "http://localhost:3000")
+	@PostMapping("/transaction/withdraw")
+	public ResponseEntity<?> last5Transactions(
+							@RequestHeader (name = "Authorization") String token) {
+
+		// extract the Customer ID from the token
+		int customerId = getCustomerIdFromToken(token);
+		// if -1 is returned, then no Customer with that username exists
+		if(customerId == -1) {
+			return ResponseEntity.status(404).body("Error in Withdraw: Customer with this username not found.");
+		}
+		
+		return new ResponseEntity<>(transactionService.viewLastFiveTransactions(customerId),HttpStatus.OK);
+
+		
+				
+				
+	}
 	
 	@CrossOrigin(origins= "http://localhost:3000")
 	@PostMapping("/transaction/transfer")

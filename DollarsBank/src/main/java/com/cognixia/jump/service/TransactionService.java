@@ -183,16 +183,21 @@ public class TransactionService {
 	
 	
 	
-public List<Transaction> viewLastFiveTransactions(List<Transaction> transactions) {
+public List<Transaction> viewLastFiveTransactions(int customerId) {
 		
 		List<Transaction> lastFiveTransactions = null;
-		
-		if (transactions.size() > 5) {
-			lastFiveTransactions = transactions.subList(transactions.size() - 5, transactions.size() - 1);
-			
-		};
-		
 		return lastFiveTransactions;
+//		
+//		
+//		CustomerRepository.get
+//		
+////		if (transactions.size() > 5) {
+////			lastFiveTransactions = transactions.subList(transactions.size() - 5, transactions.size() - 1);
+////			
+////		};
+////		
+////		return lastFiveTransactions;
+	
 			
 }
 	
