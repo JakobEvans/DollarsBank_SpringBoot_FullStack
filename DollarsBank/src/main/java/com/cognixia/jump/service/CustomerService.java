@@ -21,25 +21,25 @@ public class CustomerService {
 //	HashMap<Integer, Customer> allLoggedInCustomer = new HashMap<>();
 
 	@Autowired
-	CustomerRepository repository;
+	CustomerRepository customerRepository;
 
 	public Customer createCustomer(Customer customer) {
 		customer.setId(-1);
-		Customer created = repository.save(customer);
+		Customer created = customerRepository.save(customer);
 		return created;
 	}
 
 	public List<Customer> findAllCustomers() {
-		return repository.findAll();
+		return customerRepository.findAll();
 	}
 
 	public List<Customer> getOtherCustomers(int id) throws ResourceNotFoundException {
 //		Optional<Customer> found = repository.findById(id);
 		
-		Optional<Customer> found = repository.findById(id);
+		Optional<Customer> found = customerRepository.findById(id);
 		
 		if (found.isPresent()) {
-			List<Customer> allOtherCustomers = repository.findAll();
+			List<Customer> allOtherCustomers = customerRepository.findAll();
 			
 			
 			for(int i = 0; i < allOtherCustomers.size()-1; i++) {
@@ -60,9 +60,27 @@ public class CustomerService {
 		return null;
 
 	}
+	
+	
+	
+	/**
+	 * Gets the Customer ID from an account using its username. 
+	 * Returns -1 if no customer is found.
+	 * @param username String - The Customer's unique username.
+	 * @return int - The Customer ID, or -1 if none is found.
+	 */
+	public int getCustomerIdByUsername(String username) {
+		Customer found = customerRepository.findByUsername(username);
+		// if no customer is found, return -1
+		if(found == null) {
+			return -1;
+		}
+		return found.getId();
+	}
+
 
 	public Customer findCustomerById(int id) throws ResourceNotFoundException {
-		Optional<Customer> found = repository.findById(id);
+		Optional<Customer> found = customerRepository.findById(id);
 
 		if(found.isPresent()) {
 			return found.get();
@@ -72,7 +90,7 @@ public class CustomerService {
 	
 	
 	public String customerDataById(int id) throws ResourceNotFoundException {
-		Optional<Customer> found = repository.findById(id);
+		Optional<Customer> found = customerRepository.findById(id);
 
 //		if(found.isEmpty()) {
 //			throw new ResourceNotFoundException("Customer with id " + id + "  not found.");
@@ -93,37 +111,4 @@ public class CustomerService {
 
 }
 
-
-
-
-
-
-
-
-
-
-//
-//public boolean login(String username, String password)  {
-//	List<Customer> customers = repository.findAll();
-//	
-//	
-//	Customer customer = repository.findByUsername(username);
-//	
-//    return false;
-//    
-//    
-//}
-//
-//
-//public int logout(Customer customer)  {
-//
-//	
-//	
-//	allLoggedInCustomer.remove(customer);
-//
-//	return 0;
-//
-////	return customer;
-//  }
-//
 

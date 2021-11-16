@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,15 +74,17 @@ public class CustomerController {
 		return ResponseEntity.status(200).body( jwt );
 		
 	}
-
 	
+
+
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/customer/data/{id}")
-	public ResponseEntity<String> getCustomerDataById(@PathVariable int id) throws ResourceNotFoundException {
-		return new ResponseEntity<>(service.customerDataById(id), HttpStatus.OK);
+	@GetMapping("/customer/data")
+	public ResponseEntity<Customer> getCurrentLoggedInCustomer(@RequestHeader (name = "Authorization") String token) throws ResourceNotFoundException {
+		
+		// extract the Customer ID from the token
+		int customerId = getCustomerIdFromToken(token);
+		return new ResponseEntity<>(service.findCustomerById(customerId), HttpStatus.OK);
 	}
-
-	
 	
 
 	// gets all the other customers (all other customers except current passed in id)
@@ -99,9 +102,26 @@ public class CustomerController {
 		return new ResponseEntity<>(service.findAllCustomers(), HttpStatus.OK);
 	}
 
+	
+	
+	/**
+	 * Gets a Customer ID by their username. Returns the ID or -1 if 
+	 * no Customer is found.
+	 * @param token String - The user's JSON Web Token, sent in the Authorization header.
+	 * @return int - The Customer's ID, or -1 if no Customer with that username is found.
+	 */
+	private int getCustomerIdFromToken(String token) {
+		// remove the 'Bearer ' prefix
+		token = token.split(" ")[1];
+		String username = jwtUtil.extractUsername(token);
+		return service.getCustomerIdByUsername(username);
+	}
+	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer/{id}")
 	public ResponseEntity<Customer> getCustomerById(@PathVariable int id) throws ResourceNotFoundException {
+		
+				
 		return new ResponseEntity<>(service.findCustomerById(id), HttpStatus.OK);
 	}
 
@@ -115,37 +135,6 @@ public class CustomerController {
 	}
 
 	
-//	@CrossOrigin(origins = "http://localhost:3000")
-//	@PostMapping("/customer/login")
-//	public Status loginCustomer(@RequestBody Customer customer)throws ResourceNotFoundException {
-////		return new ResponseEntity<>(service.login(customer), HttpStatus.OK);
-//		return service.login(customer);
-//
-//	
-//	}
-//	
-//	
-//	
-//	@CrossOrigin(origins = "http://localhost:3000")
-//    @PostMapping("/customer/logout")
-//    public Status logoutCustomer(@RequestBody Customer customer) {
-//		return new ResponseEntity<>(service.logout(customer), HttpStatus.OK);
-////		return service.logout(customer);
-//
-//    }
-	
-	
-	
-//
 
-
-//	
-//	@CrossOrigin(origins= "http://localhost:3000")
-//	@DeleteMapping("/customer/{id}")
-//	public ResponseEntity<Customer> deleteCustomerById(@PathVariable int id) throws ResourceNotFoundException {
-////		return new ResponseEntity<>(service.deleteCustomerById(id),HttpStatus.OK);
-//	}
-//	
-//	
 
 }

@@ -27,7 +27,7 @@ import com.cognixia.jump.util.JwtUtil;
 public class TransactionController {
 	
 	@Autowired
-	TransactionService service;
+	TransactionService transactionService;
 
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -35,29 +35,15 @@ public class TransactionController {
 	@CrossOrigin(origins= "http://localhost:3000")
 	@GetMapping("/transaction")
 	public ResponseEntity<List<?>> getAllTransactions() {
-		return new ResponseEntity<>(service.findAllTransactions(),HttpStatus.OK);
+		return new ResponseEntity<>(transactionService.findAllTransactions(),HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins= "http://localhost:3000")
 	@GetMapping("/transaction/{id}")
 	public ResponseEntity<?> getTransactionById(@PathVariable int id) throws ResourceNotFoundException {
-		return new ResponseEntity<>(service.findTransactionById(id),HttpStatus.OK);
+		return new ResponseEntity<>(transactionService.findTransactionById(id),HttpStatus.OK);
 	}
-	
-//	@CrossOrigin(origins= "http://localhost:3000")
-//	@PostMapping("/customer")
-//	public ResponseEntity<?> createCustomer(@RequestBody Transaction transaction){
-//		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
-//
-//	}
-	
-	
-	@CrossOrigin(origins= "http://localhost:3000")
-	@PostMapping("/transaction")
-	public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction){
-		return new ResponseEntity<>(service.createTransaction(transaction), HttpStatus.CREATED);
 
-	}
 
 	@CrossOrigin(origins= "http://localhost:3000")
 	@PostMapping("/transaction/deposit")
@@ -71,7 +57,7 @@ public class TransactionController {
 			return ResponseEntity.status(404).body("Error in Deposit: Customer with this username not found.");
 		}
 
-		Transaction result = service.makeDeposit(request.getAmount(), customerId);
+		Transaction result = transactionService.makeDeposit(request.getAmount(), customerId);
 		// if the result is null, return an error
 		if(result == null) {
 			return ResponseEntity.status(404).body("Error in Deposit: transaction failed.");
@@ -91,7 +77,7 @@ public class TransactionController {
 		// remove the 'Bearer ' prefix
 		token = token.split(" ")[1];
 		String username = jwtUtil.extractUsername(token);
-		return service.getCustomerIdByUsername(username);
+		return transactionService.getCustomerIdByUsername(username);
 	}
 	
 
@@ -107,7 +93,7 @@ public class TransactionController {
 			return ResponseEntity.status(404).body("Error in Withdraw: Customer with this username not found.");
 		}
 
-		Transaction result = service.makeWithdrawal(request.getAmount(), customerId);
+		Transaction result = transactionService.makeWithdrawal(request.getAmount(), customerId);
 		// if the result is null, return an error
 		if(result == null) {
 			return ResponseEntity.status(404).body("Error in Withdraw: Insufficient funds.");
@@ -119,8 +105,20 @@ public class TransactionController {
 	
 	@CrossOrigin(origins= "http://localhost:3000")
 	@PostMapping("/transaction/transfer")
-	public ResponseEntity<?> makeTransfer(@RequestBody TransactionTransferRequest request) {
-		Transaction result = service.makeTransfer(request.getAmount(), request.getCustomerId(), request.getRecieverId());
+	public ResponseEntity<?> makeTransfer(@RequestBody TransactionTransferRequest request,
+											@RequestHeader (name = "Authorization") String token) {
+		
+		
+		// extract the Customer ID from the token
+		int customerId = getCustomerIdFromToken(token);
+		// if -1 is returned, then no Customer with that username exists
+		if(customerId == -1) {
+			return ResponseEntity.status(404).body("Error in Withdraw: Customer with this username not found.");
+		}
+		
+		
+		
+		Transaction result = transactionService.makeTransfer(request.getAmount(), customerId, request.getRecieverId());
 		// **SHould do error handling for withdrawing to much when you dont have funds**
 		// if the result is null, return an error
 		if(result == null) {
