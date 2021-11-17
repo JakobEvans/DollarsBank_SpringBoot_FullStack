@@ -18,14 +18,22 @@ import com.cognixia.jump.repository.CustomerRepository;
 @Service
 public class CustomerService {
 
-//	HashMap<Integer, Customer> allLoggedInCustomer = new HashMap<>();
-
 	@Autowired
 	CustomerRepository customerRepository;
+
+	@Autowired
+	TransactionService transactionService;
 
 	public Customer createCustomer(Customer customer) {
 		customer.setId(-1);
 		Customer created = customerRepository.save(customer);
+		// save the initial balance transaction
+		double balance = created.getInitialDeposit();
+		int id = created.getId();
+		transactionService.makeInitialDeposit(balance, id);
+		// reload the Customer so the initial balance transaction is visible
+		created = customerRepository.getById(created.getId());
+		// return the Customer
 		return created;
 	}
 

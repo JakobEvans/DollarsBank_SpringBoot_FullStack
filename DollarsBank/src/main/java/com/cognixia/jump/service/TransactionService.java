@@ -100,6 +100,42 @@ public class TransactionService {
 		// save and return the transaction
 		return transactionRepo.save(deposit);
 	}
+
+	/**
+	 * This is used only for an new account's initial balance deposit.
+	 * @param amount double - The amount to be deposited.
+	 * @param customerId int - The ID of the new account.
+	 * @return Transaction - The initial balance Transaction, or null if the 
+	 * 						amount is zero or the customerId is not found.
+	 */
+	public Transaction makeInitialDeposit(double amount, int customerId) {
+		// make sure the Customer exists
+		Optional<Customer> customerFound = customerRepo.findById(customerId);
+		// if customerFound is null, then the Customer is invalid
+		if (!customerFound.isPresent()) {
+			// Customer ID invalid
+			return null;
+		}
+		Customer customer = customerFound.get();
+		// make sure the amount isn't zero
+		if (amount == 0.0) {
+			return null;
+		}
+		// make sure the amount is positive
+		if (amount < 0) {
+			amount = amount * -1;
+		}
+		double currentBalance = customer.getCurrentBalance();
+		double balanceAfter = currentBalance + amount;
+		Transaction deposit = new Transaction(-1, new Date(), amount, currentBalance, balanceAfter, "Initial Balance",
+				customer);
+		// update the Customer with the new balance
+		customer.setCurrentBalance(balanceAfter);
+		// save the customer
+		customerRepo.save(customer);
+		// save and return the transaction
+		return transactionRepo.save(deposit);
+	}
 	
 	
 	public Transaction makeTransfer(double amount, int customerId, int otherCustomerId) {
