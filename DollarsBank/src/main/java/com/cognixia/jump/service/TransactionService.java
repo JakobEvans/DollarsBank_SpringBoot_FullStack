@@ -194,8 +194,8 @@ public List<Transaction> viewLastFiveTransactions(int customerId) {
 		List<Transaction> lastFiveTransactions = customer.getTransactions();		
 		
 		
-		if (transactions.size() > 5) {
-			lastFiveTransactions = transactions.subList(transactions.size() - 5, transactions.size() - 1);
+		if (lastFiveTransactions.size() > 5) {
+			lastFiveTransactions = lastFiveTransactions.subList(lastFiveTransactions.size() - 5, lastFiveTransactions.size() - 1);
 			
 		};
 	
