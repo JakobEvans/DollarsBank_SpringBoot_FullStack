@@ -179,26 +179,27 @@ public class TransactionService {
 		
 	}
 
-	
-	
-	
-	
+		
 public List<Transaction> viewLastFiveTransactions(int customerId) {
 		
-		List<Transaction> lastFiveTransactions = null;
-		return lastFiveTransactions;
-//		
-//		
-//		CustomerRepository.get
-//		
-////		if (transactions.size() > 5) {
-////			lastFiveTransactions = transactions.subList(transactions.size() - 5, transactions.size() - 1);
-////			
-////		};
-////		
-////		return lastFiveTransactions;
+		Optional<Customer> customerFound = customerRepo.findById(customerId);
+		// if customerFound is null, then the Customer is invalid
+		if (!customerFound.isPresent()) {
+			// Customer ID invalid
+			return null;
+		}
 	
+		Customer customer = customerFound.get();
+		
+		List<Transaction> lastFiveTransactions = customer.getTransactions();		
+		
+		
+		if (transactions.size() > 5) {
+			lastFiveTransactions = transactions.subList(transactions.size() - 5, transactions.size() - 1);
 			
+		};
+	
+		return lastFiveTransactions;		
 }
 	
 	
