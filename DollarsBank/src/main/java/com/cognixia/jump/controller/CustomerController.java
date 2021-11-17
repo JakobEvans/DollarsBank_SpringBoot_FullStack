@@ -131,7 +131,7 @@ public class CustomerController {
 	@CrossOrigin(origins= "http://localhost:3000")
 	@PostMapping("/create-account")
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
-		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.CREATED);
+		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.OK);
 
 	}
 
