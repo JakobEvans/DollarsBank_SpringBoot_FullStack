@@ -46,6 +46,7 @@ public class CustomerController {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequest authRequest) throws Exception {
 		

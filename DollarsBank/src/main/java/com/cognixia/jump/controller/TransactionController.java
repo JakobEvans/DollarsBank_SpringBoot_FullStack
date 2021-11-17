@@ -117,10 +117,6 @@ public class TransactionController {
 		}
 		
 		return new ResponseEntity<>(transactionService.viewLastFiveTransactions(customerId),HttpStatus.OK);
-
-		
-				
-				
 	}
 	
 	@CrossOrigin(origins= "http://localhost:3000")
