@@ -140,7 +140,7 @@ public class TransactionController {
 	 * @return List<Transaction> - A collection of the Customer's 5 recent Transactions.
 	 */
 	@CrossOrigin(origins= "http://localhost:3000")
-	@PostMapping("/transaction/history")
+	@GetMapping("/transaction/history")
 	public ResponseEntity<?> last5Transactions(
 							@RequestHeader (name = "Authorization") String token) {
 
