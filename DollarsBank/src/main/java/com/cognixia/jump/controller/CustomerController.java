@@ -27,7 +27,6 @@ import com.cognixia.jump.model.MyUserDetails;
 import com.cognixia.jump.model.Transaction;
 import com.cognixia.jump.service.CustomerService;
 import com.cognixia.jump.service.MyUserDetailsService;
-import com.cognixia.jump.service.TransactionService;
 import com.cognixia.jump.util.JwtUtil;
 
 @RestController
@@ -46,6 +45,21 @@ public class CustomerController {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	/**
+	 * Allows the Customer to sign in with a username and password. 
+	 * Returns a JWT token that the Customer must use to authorize 
+	 * all other requests, or an error if the username and password 
+	 * are incorrect.
+	 * @param authRequest - A JSON body containing a "username" and "password" 
+	 * 						labeled with those keys. Like:
+	 * 						{
+	 * 							"username": "User1",
+	 * 							"password": "testPassword"
+	 * 						}
+	 * @return String - The Customer's JSON Web Token, or an error if login was 
+	 * 					unsuccessful.
+	 * @throws Exception - If the username or password are incorrect.
+	 */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequest authRequest) throws Exception {
@@ -73,11 +87,17 @@ public class CustomerController {
 		
 		// return token
 		return ResponseEntity.status(200).body( jwt );
-		
 	}
 	
-
-
+	/**
+	 * Returns the customer info for the current user. This extracts the Customer ID 
+	 * from the JSON Web Token which must be included in the Authorization header.
+	 * @param token String - The JSON Web Token obtained by the user on login.
+	 * @return Customer - The Customer object containing all the Customer's name, 
+	 * 						email, username, address, phone, account balance, and initial deposit.
+	 * @throws ResourceNotFoundException - Returns a 404 error if the Customer ID in the token 
+	 * 										cannot be found.
+	 */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer/data")
 	public ResponseEntity<Customer> getCurrentLoggedInCustomer(@RequestHeader (name = "Authorization") String token) throws ResourceNotFoundException {
@@ -88,7 +108,13 @@ public class CustomerController {
 	}
 	
 
-	// gets all the other customers (all other customers except current passed in id)
+	/**
+	 * Returns all Customers but the current Customer. Used to display target accounts for 
+	 * the Transfer operation.
+	 * @param id
+	 * @return List<Customer> - A collection of all Customers in the database besides the specified Customer.
+	 * @throws ResourceNotFoundException - Returns a 404 error if the specified Customer does not exist.
+	 */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer/other/{id}")
 	public ResponseEntity<List<Customer>> getAllOtherCustomers(@PathVariable int id) throws ResourceNotFoundException {
@@ -96,7 +122,10 @@ public class CustomerController {
 	}
 	
 	
-	
+	/**
+	 * Returns all Customers in the system.
+	 * @return List<Customer> - A collection of all Customers in the database.
+	 */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
@@ -118,6 +147,13 @@ public class CustomerController {
 		return service.getCustomerIdByUsername(username);
 	}
 	
+	/**
+	 * Returns a Customer by their ID.
+	 * @param id int - The Customer's unique integer ID.
+	 * @return Customer - The specified Customer object.
+	 * @throws ResourceNotFoundException - Returns a 404 error if no Customer with that 
+	 * 										ID exists.
+	 */
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/customer/{id}")
 	public ResponseEntity<Customer> getCustomerById(@PathVariable int id) throws ResourceNotFoundException {
@@ -126,16 +162,25 @@ public class CustomerController {
 		return new ResponseEntity<>(service.findCustomerById(id), HttpStatus.OK);
 	}
 
-	
-	
+	/**
+	 * Create a new Customer account. Takes in a name, address, phone, 
+	 * username, password, and initial deposit. Returns the new Customer object.
+	 * @param customer Customer - The new Customer object, which looks like:
+	 * 							{
+    								"name": "Thomas Usersson",
+									"address": "1234 South Drive, City, WA 98882",
+									"phoneNumber": "(253) 777-0980",
+									"username": "username5",
+									"password": "password",
+									"initialDeposit": 200.0
+								}
+	 * @return Customer - The new Customer object.
+	 */
 	@CrossOrigin(origins= "http://localhost:3000")
 	@PostMapping("/create-account")
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
 		return new ResponseEntity<>(service.createCustomer(customer), HttpStatus.OK);
 
 	}
-
-	
-
 
 }
