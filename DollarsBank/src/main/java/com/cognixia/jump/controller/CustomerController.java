@@ -116,9 +116,13 @@ public class CustomerController {
 	 * @throws ResourceNotFoundException - Returns a 404 error if the specified Customer does not exist.
 	 */
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/customer/other/{id}")
-	public ResponseEntity<List<Customer>> getAllOtherCustomers(@PathVariable int id) throws ResourceNotFoundException {
-		return new ResponseEntity<>(service.getOtherCustomers(id), HttpStatus.OK);
+	@GetMapping("/customer/other")
+	public ResponseEntity<List<Customer>> getAllOtherCustomers(@RequestHeader (name = "Authorization") String token) throws ResourceNotFoundException {
+		
+		int customerId = getCustomerIdFromToken(token);
+
+		
+		return new ResponseEntity<>(service.getOtherCustomers(customerId), HttpStatus.OK);
 	}
 	
 	
